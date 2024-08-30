@@ -7,7 +7,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
 
-public class HelloController {
+public class ChatGPTJavaFxController {
 
     @FXML
     private TextField textQuestion;
