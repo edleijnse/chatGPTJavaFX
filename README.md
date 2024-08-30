@@ -1,4 +1,5 @@
-CHATGPT Client written in JAVAFX 
+CHATGPT Client written in JAVAFX   
+
 Prerequisites:
 For GUI development, download Gluon Scene Builder:
 https://gluonhq.com/products/scene-builder/
