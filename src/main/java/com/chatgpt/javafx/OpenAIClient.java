@@ -1,4 +1,4 @@
-package com.example.demojavafx;
+package com.chatgpt.javafx;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

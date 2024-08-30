@@ -23,7 +23,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.demojavafx/com.example.demojavafx.HelloApplication</mainClass>
+              <mainClass>com.example.demojavafx/com.chatgpt.javafx.ChatGPTJavaFX</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
@@ -48,7 +48,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Main-Class>com.example.demojavafx.HelloApplication</Main-Class>
+                    <Main-Class>com.chatgpt.javafx.ChatGPTJavaFX</Main-Class>
                     <Implementation-Title>My Application</Implementation-Title>
                     <Implementation-Version>1.0</Implementation-Version>
                   </manifestEntries>

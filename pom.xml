@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example</groupId>
-  <artifactId>demoJavaFX</artifactId>
+  <groupId>com.chatgpt.javafx</groupId>
+  <artifactId>chatGPTJavaFX</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>demoJavaFX</name>
 
@@ -108,7 +108,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.demojavafx/com.example.demojavafx.HelloApplication</mainClass>
+              <mainClass>com.example.demojavafx/com.chatgpt.javafx.ChatGPTJavaFX</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
@@ -137,7 +137,7 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>com.example.demojavafx.HelloApplication</Main-Class> <!-- Replace with your main class -->
+                    <Main-Class>com.chatgpt.javafx.ChatGPTJavaFX</Main-Class> <!-- Replace with your main class -->
                     <Implementation-Title>My Application</Implementation-Title>
                     <Implementation-Version>1.0</Implementation-Version>
                     <!-- Add other entries as needed -->

@@ -1,4 +1,4 @@
-package com.example.demojavafx;
+package com.chatgpt.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
