@@ -20,6 +20,7 @@
         <buttons>
             <Button id="buttonAsk" onAction="#onButtonAskClick" text="Ask" />
             <Button id="buttonClean" mnemonicParsing="false" onAction="#onCleanButtonClick" text="Clean" />
+         <Button id="buttonClearHistory" mnemonicParsing="false" onAction="#onClearHistoryButtonClick" text="Clear History" />
         </buttons>
     </ButtonBar>
     <Label fx:id="welcomeText" />

@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public  class OpenAIClient {
     public static String escapeHtml(String input) {
@@ -47,28 +49,32 @@ public  class OpenAIClient {
         return HttpClients.createDefault();
     }
 
-
-    public String getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
-        String user = "language teacher English, Spanish and German";
-
+    public String getOpenAIResponseGpt4Mini(String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
         // Create the root node
         ObjectNode rootNode = mapper.createObjectNode();
         // Add the 'model' field
         rootNode.put("model", "gpt-4o-mini");
         // Create the 'messages' array node
         ArrayNode messagesNode = rootNode.putArray("messages");
-        // Create a message object
+
+        // Add the content history messages
+        for (String historicalContent : contentHistory) {
+            ObjectNode historyMessage = mapper.createObjectNode();
+            historyMessage.put("role", "user"); // Assuming historical messages are from the user
+            historyMessage.put("content", escapeHtml(historicalContent));
+            messagesNode.add(historyMessage);
+        }
+
+        // Create a new message object for the current inputText
         ObjectNode message1 = mapper.createObjectNode();
         message1.put("role", "user"); // Use the correct role
         message1.put("content", escapeHtml(inputText));
-
         // Add the message object to the 'messages' array
         messagesNode.add(message1);
+
         // Convert the rootNode to a JSON string
         String requestBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
-
         HttpPost request = new HttpPost("https://api.openai.com/v1/chat/completions");
         request.setHeader("Authorization", "Bearer " + apiKey);
         request.setHeader("Content-Type", "application/json");
@@ -81,7 +87,6 @@ public  class OpenAIClient {
                 System.err.println("Error: " + errorResponse);
                 return "Error: " + errorResponse; // Or throw an exception
             }
-
             JsonNode responseData = mapper.readTree(response.getEntity().getContent());
             JsonNode choicesNode = responseData.path("choices");
             if (choicesNode.isArray() && choicesNode.size() > 0) {
@@ -94,7 +99,6 @@ public  class OpenAIClient {
         }
         return "";
     }
-
     public String getOpenAIResponseGpt4(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
         String user = "language teacher English, Spanish and German";
 
@@ -151,7 +155,11 @@ public  class OpenAIClient {
             String inputText = "Best things to see in Paris, in categories";
             String inputText2 = "Best things to see in Paris";
             // getOpenAIResponseGpt4(inputText, client, apiKey);
-            String response = getOpenAIResponseGpt4Mini(inputText, client, apiKey);
+            // Content history
+            List<String> contentHistory = new ArrayList<>();
+            contentHistory.add("Hello!");
+            contentHistory.add("How can you assist me today?");
+            String response = getOpenAIResponseGpt4Mini(inputText, contentHistory, client, apiKey);
             System.out.println("Answer: " + response);
 
         } catch (IOException e) {
