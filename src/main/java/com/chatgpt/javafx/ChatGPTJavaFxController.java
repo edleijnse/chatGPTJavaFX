@@ -16,6 +16,8 @@ public class ChatGPTJavaFxController {
 
     @FXML
     private TextArea textareaAnswer;
+    @FXML
+    private TextArea textareaHistory;
     // Content history
     private List<String> contentHistory = new ArrayList<>();
 
@@ -35,13 +37,16 @@ public class ChatGPTJavaFxController {
         textQuestion.setText("");
         textareaAnswer.setText("");
     }
+
     @FXML
     protected void onClearHistoryButtonClick() {
         // Clear the contents of textQuestion and textareaAnswer
         textQuestion.setText("");
         textareaAnswer.setText("");
+        textareaHistory.setText("");
         contentHistory.clear();
     }
+
     private void fillAnswer() throws IOException {
         OpenAIClient aiClient = new OpenAIClient();
         String apiKey = aiClient.readApiKey();
@@ -49,7 +54,21 @@ public class ChatGPTJavaFxController {
 
         String inputText = textQuestion.getText();
         String myAnswer = aiClient.getOpenAIResponseGpt4Mini(inputText, contentHistory, client, apiKey);
+        if (contentHistory.size() > 0) {
+            updateTextAreaHistory();
+        }
+        contentHistory.add("QUESTION");
+        contentHistory.add(inputText);
+        contentHistory.add("ANSWER");
         contentHistory.add(myAnswer);
         textareaAnswer.setText(myAnswer);
+    }
+
+    private void updateTextAreaHistory() {
+        StringBuilder historyCombined = new StringBuilder();
+        for (String entry : contentHistory) {
+            historyCombined.append(entry).append("\n\n");
+        }
+        textareaHistory.setText(historyCombined.toString());
     }
 }

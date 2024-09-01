@@ -16,6 +16,7 @@
     <TextField id="textQuestion" fx:id="textQuestion" prefHeight="50.0" prefWidth="200.0" />
     <Label text="Answer" />
     <TextArea id="textareaAnswer" fx:id="textareaAnswer" prefHeight="294.0" prefWidth="603.0" wrapText="true" />
+    <TextArea id="textareaAnswer" fx:id="textareaHistory" prefHeight="294.0" prefWidth="603.0" wrapText="true" />
     <ButtonBar prefHeight="40.0" prefWidth="173.0">
         <buttons>
             <Button id="buttonAsk" onAction="#onButtonAskClick" text="Ask" />
