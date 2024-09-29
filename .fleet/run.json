@@ -7,7 +7,7 @@
             "options": [
                 "--module-path", "C:\\Program Files\\javafx-sdk-22.0.2\\lib;$PROJECT_DIR$\\lib",
                 "--add-modules", "javafx.controls,javafx.fxml",
-                "-classpath", "$PROJECT_DIR$\\target\\classes;$PROJECT_DIR$\\lib\\commons-logging-1.2.jar;$PROJECT_DIR$\\lib\\jackson-databind-2.12.5.jar;$PROJECT_DIR$\\lib\\jackson-core-2.12.5.jar;$PROJECT_DIR$\\lib\\jackson-annotations-2.12.5.jar;$PROJECT_DIR$\\lib\\httpclient-4.5.13.jar;$PROJECT_DIR$\\lib\\httpcore-4.4.13.jar;$PROJECT_DIR$\\lib\\commons-lang3-3.12.0.jar"
+                "-classpath", "$PROJECT_DIR$\\target\\classes;$PROJECT_DIR$\\target\\chatGPTJavaFX-1.0-SNAPSHOT-shaded.jar"
             ]
         }
     ]
