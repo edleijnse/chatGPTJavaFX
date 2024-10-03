@@ -49,12 +49,12 @@ public  class OpenAIClient {
         return HttpClients.createDefault();
     }
 
-    public String getOpenAIResponseGpt4Mini(String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
+    public String getOpenAIResponseGpt4(String model, String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         // Create the root node
         ObjectNode rootNode = mapper.createObjectNode();
         // Add the 'model' field
-        rootNode.put("model", "gpt-4o-mini");
+        rootNode.put("model", model);
         // Create the 'messages' array node
         ArrayNode messagesNode = rootNode.putArray("messages");
 
@@ -99,52 +99,6 @@ public  class OpenAIClient {
         }
         return "";
     }
-    public String getOpenAIResponseGpt4(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
-        String user = "language teacher English, Spanish and German";
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        // Create the root node
-        ObjectNode rootNode = mapper.createObjectNode();
-        // Add the 'model' field
-        rootNode.put("model", "gpt-4o-mini");
-        // Create the 'messages' array node
-        ArrayNode messagesNode = rootNode.putArray("messages");
-        // Create a message object
-        ObjectNode message1 = mapper.createObjectNode();
-        message1.put("role", "user"); // Use the correct role
-        message1.put("content", escapeHtml(inputText));
-
-        // Add the message object to the 'messages' array
-        messagesNode.add(message1);
-        // Convert the rootNode to a JSON string
-        String requestBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
-
-        HttpPost request = new HttpPost("https://api.openai.com/v1/chat/completions");
-        request.setHeader("Authorization", "Bearer " + apiKey);
-        request.setHeader("Content-Type", "application/json");
-        request.setEntity(new StringEntity(requestBody));
-
-        try (CloseableHttpResponse response = client.execute(request)) {
-            int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != 200) {
-                String errorResponse = EntityUtils.toString(response.getEntity());
-                System.err.println("Error: " + errorResponse);
-                return "Error: " + errorResponse; // Or throw an exception
-            }
-
-            JsonNode responseData = mapper.readTree(response.getEntity().getContent());
-            JsonNode choicesNode = responseData.path("choices");
-            if (choicesNode.isArray() && choicesNode.size() > 0) {
-                String completion = choicesNode.get(0).path("message").path("content").asText();
-                return completion;
-            }
-        } catch (Exception e) {
-            System.err.println("Error occurred: " + e.getMessage());
-            return "Error: " + e.getMessage(); // Or throw an exception
-        }
-        return "";
-    }
 
     public void main(String[] args) {
         try {
@@ -159,7 +113,7 @@ public  class OpenAIClient {
             List<String> contentHistory = new ArrayList<>();
             contentHistory.add("Hello!");
             contentHistory.add("How can you assist me today?");
-            String response = getOpenAIResponseGpt4Mini(inputText, contentHistory, client, apiKey);
+            String response = getOpenAIResponseGpt4("gpt4-o-mini",inputText, contentHistory, client, apiKey);
             System.out.println("Answer: " + response);
 
         } catch (IOException e) {
