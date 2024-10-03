@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
-  <artifactId>demoJavaFX</artifactId>
+  <groupId>com.chatgpt.javafx</groupId>
+  <artifactId>chatGPTJavaFX</artifactId>
   <name>demoJavaFX</name>
   <version>1.0-SNAPSHOT</version>
   <build>
@@ -16,25 +16,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <configuration>
-              <mainClass>com.example.demojavafx/com.chatgpt.javafx.ChatGPTJavaFX</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
-              <noManPages>true</noManPages>
-              <stripDebug>true</stripDebug>
-              <noHeaderFiles>true</noHeaderFiles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.4</version>
         <executions>
@@ -44,17 +25,11 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <minimizeJar>false</minimizeJar>
               <transformers>
                 <transformer>
                   <manifestEntries>
                     <Main-Class>com.chatgpt.javafx.ChatGPTJavaFX</Main-Class>
-                    <Implementation-Title>My Application</Implementation-Title>
-                    <Implementation-Version>1.0</Implementation-Version>
                   </manifestEntries>
-                </transformer>
-                <transformer>
-                  <resource>META-INF/services/javafx.fxml.FXMLLoader</resource>
                 </transformer>
               </transformers>
             </configuration>
@@ -102,7 +77,9 @@
     </dependency>
   </dependencies>
   <properties>
+    <java.version>11</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javafx.version>20.0.2</javafx.version>
     <junit.version>5.9.2</junit.version>
   </properties>
 </project>
