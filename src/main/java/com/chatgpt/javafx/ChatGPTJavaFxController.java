@@ -2,9 +2,12 @@ package com.chatgpt.javafx;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
@@ -20,6 +23,11 @@ public class ChatGPTJavaFxController implements Initializable {
     private CheckBox chkSimple;
     @FXML
     private CheckBox chkExtended;
+    @FXML
+    private Label lblSimpleModel;
+    @FXML
+    private Label lblExtendedModel;
+
     @FXML
     private TextField textQuestion;
 
@@ -108,8 +116,14 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkSimple.isSelected()) {
             System.out.println("Simple model wird verwendet.");
             chkExtended.setSelected(false);
+            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblExtendedModel.setTextFill(Color.RED);
+            lblSimpleModel.setText("model gpt4-0-mini");
+            lblSimpleModel.setTextFill(Color.GREEN);
+
         } else {
             System.out.println("Simple model wird nicht verwendet.");
+            lblExtendedModel.setBlendMode(BlendMode.EXCLUSION);
             chkExtended.setSelected(false);
         }
     }
@@ -120,6 +134,10 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkExtended.isSelected()) {
             System.out.println("Extended model wird verwendet.");
             chkSimple.setSelected(false);
+            lblExtendedModel.setText("model gpt4-o");
+            lblExtendedModel.setTextFill(Color.GREEN);
+            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setTextFill(Color.RED);
         } else {
             System.out.println("Extended model wird nicht verwendet.");
             chkSimple.setSelected(true);
