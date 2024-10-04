@@ -86,10 +86,21 @@ public class ChatGPTJavaFxController implements Initializable {
 
         String inputText = textQuestion.getText();
         String myModel = "";
-        if (chkSimple.isSelected()){
+        if (chkExtended.isSelected()){
             myModel = "gpt-4o";
+            chkSimple.setSelected(false);
+            lblExtendedModel.setText("model gpt4-o");
+            lblExtendedModel.setTextFill(Color.GREEN);
+            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setTextFill(Color.RED);
         } else {
             myModel = "gpt-4o-mini";
+            chkSimple.setSelected(true);
+            chkExtended.setSelected(false);
+            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblExtendedModel.setTextFill(Color.RED);
+            lblSimpleModel.setText("model gpt4-0-mini");
+            lblSimpleModel.setTextFill(Color.GREEN);
         }
         String myAnswer = aiClient.getOpenAIResponseGpt4(myModel, inputText, contentHistory, client, apiKey);
         if (contentHistory.size() > 0) {
