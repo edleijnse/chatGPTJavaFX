@@ -36,7 +36,7 @@
             <CheckBox id="chkExtended" fx:id="chkExtended" onAction="#onChkExtendedClicked" selected="false"
                       text="extended model" GridPane.rowIndex="3"/>
             <CheckBox id="chkIntelligent" fx:id="chkIntelligent" onAction="#onChkIntelligentClicked" selected="false"
-                      text="extended model" GridPane.rowIndex="5"/>
+                      text="more intelligent model" GridPane.rowIndex="5"/>
             <Label id="lblSimpleModel" fx:id="lblSimpleModel" text="Model gpt4-o-mini " GridPane.columnIndex="1"
                    GridPane.rowIndex="1"/>
             <Label id="lblExtendedModel" fx:id="lblExtendedModel" text="Model gpt4-0" GridPane.columnIndex="1"
