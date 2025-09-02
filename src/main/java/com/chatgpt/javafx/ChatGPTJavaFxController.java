@@ -90,34 +90,38 @@ public class ChatGPTJavaFxController implements Initializable {
 
         String inputText = textQuestion.getText();
         String myModel = "";
+        String myModel1 = "gpt-5";
+        String myModel2 = "gpt-5-mini";
+        String myModel3 = "o3-mini";
         if (chkExtended.isSelected()){
-            myModel = "gpt-4o";
+            myModel = myModel1;
+
             chkSimple.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o");
+            lblExtendedModel.setText("model " + myModel);
             lblExtendedModel.setTextFill(Color.GREEN);
-            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setText("model " + myModel2 + " NOT USED");
             lblSimpleModel.setTextFill(Color.RED);
-            lblIntelligentModel.setText("model o3-mini NOT USED");
+            lblIntelligentModel.setText("model " + myModel3 + " NOT USED");
             lblIntelligentModel.setTextFill(Color.RED);
         } else if (chkSimple.isSelected()) {
-            myModel = "gpt-4o-mini";
+            myModel = myModel2;
             chkSimple.setSelected(true);
             chkExtended.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblExtendedModel.setText("model " + myModel1 + " NOT USED");
             lblExtendedModel.setTextFill(Color.RED);
-            lblSimpleModel.setText("model gpt4-0-mini");
+            lblSimpleModel.setText("model " + myModel2);
             lblSimpleModel.setTextFill(Color.GREEN);
-            lblIntelligentModel.setText("model o3-mini NOT USED");
+            lblIntelligentModel.setText("model " + myModel3 + " NOT USED");
             lblIntelligentModel.setTextFill(Color.RED);
         } else{
-            myModel = "o3-mini";
+            myModel = myModel3;
             chkIntelligent.setSelected(true);
             chkExtended.setSelected(false);
             chkSimple.setSelected(false);
-            lblIntelligentModel.setText("model o3-mini");
-            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblIntelligentModel.setText("model " + myModel3);
+            lblExtendedModel.setText("model " + myModel1 + " NOT USED");
             lblExtendedModel.setTextFill(Color.RED);
-            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setText("model " + myModel2 + " NOT USED");
             lblSimpleModel.setTextFill(Color.RED);
 
         }
@@ -146,9 +150,9 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkSimple.isSelected()) {
             System.out.println("Simple model wird verwendet.");
             chkExtended.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblExtendedModel.setText("model gpt5 NOT USED");
             lblExtendedModel.setTextFill(Color.RED);
-            lblSimpleModel.setText("model gpt4-0-mini");
+            lblSimpleModel.setText("model gpt5-mini");
             lblSimpleModel.setTextFill(Color.GREEN);
             lblIntelligentModel.setText("model o3-mini NOT USED");
             lblIntelligentModel.setTextFill(Color.RED);
@@ -166,9 +170,9 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkExtended.isSelected()) {
             System.out.println("Extended model wird verwendet.");
             chkSimple.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o");
+            lblExtendedModel.setText("model gpt5");
             lblExtendedModel.setTextFill(Color.GREEN);
-            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setText("model gpt5-mini NOT USED");
             lblSimpleModel.setTextFill(Color.RED);
             lblIntelligentModel.setText("model o3-mini NOT USED");
             lblIntelligentModel.setTextFill(Color.RED);
