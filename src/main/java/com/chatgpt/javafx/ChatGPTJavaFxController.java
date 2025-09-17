@@ -16,6 +16,9 @@ import java.util.List;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.concurrent.Task;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 
 public class ChatGPTJavaFxController implements Initializable {
 
@@ -39,8 +42,15 @@ public class ChatGPTJavaFxController implements Initializable {
     private TextArea textareaAnswer;
     @FXML
     private TextArea textareaHistory;
+
+    // Buttons and progress
+    @FXML
+    private Button buttonAsk;
+    @FXML
+    private ProgressIndicator loading;
+
     // Content history
-    private List<String> contentHistory = new ArrayList<>();
+    private final List<String> contentHistory = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,13 +65,79 @@ public class ChatGPTJavaFxController implements Initializable {
         } else {
             System.out.println("chkExtended is null");
         }
+        // Ensure hidden spinner doesn't take layout space
+        if (loading != null) {
+            loading.managedProperty().bind(loading.visibleProperty());
+            loading.setVisible(false);
+        }
     }
 
     @FXML
     protected void onButtonAskClick() throws IOException {
-        // communicate with ChatGPT
         try {
-            fillAnswer();
+            String inputText = textQuestion.getText();
+
+            // Determine model and reflect in labels
+            String myModel;
+            if (chkExtended.isSelected()){
+                myModel = "gpt-5";
+                chkSimple.setSelected(false);
+                lblExtendedModel.setText("model gpt5");
+                lblExtendedModel.setTextFill(Color.GREEN);
+                lblSimpleModel.setText("model gpt5-mini NOT USED");
+                lblSimpleModel.setTextFill(Color.RED);
+            } else  {
+                myModel = "gpt-5-mini";
+                chkSimple.setSelected(true);
+                chkExtended.setSelected(false);
+                lblExtendedModel.setText("model gpt5 NOT USED");
+                lblExtendedModel.setTextFill(Color.RED);
+                lblSimpleModel.setText("model gpt5-mini");
+                lblSimpleModel.setTextFill(Color.GREEN);
+            }
+
+            OpenAIClient aiClient = new OpenAIClient();
+            String apiKey = aiClient.readApiKey();
+            CloseableHttpClient client = aiClient.initOpenAIClient();
+
+            Task<String> task = new Task<>() {
+                @Override
+                protected String call() throws Exception {
+                    // Perform long-running call off the FX thread
+                    return aiClient.getOpenAIResponseGpt(myModel, inputText, contentHistory, client, apiKey);
+                }
+            };
+
+            // UI feedback
+            if (buttonAsk != null) buttonAsk.setDisable(true);
+            if (loading != null) loading.setVisible(true);
+
+            task.setOnSucceeded(evt -> {
+                String myAnswer = task.getValue();
+                if (!contentHistory.isEmpty()) {
+                    updateTextAreaHistory();
+                }
+                contentHistory.add("QUESTION");
+                contentHistory.add(inputText);
+                contentHistory.add("ANSWER");
+                contentHistory.add(myAnswer);
+                textareaAnswer.setText(myAnswer);
+
+                if (buttonAsk != null) buttonAsk.setDisable(false);
+                if (loading != null) loading.setVisible(false);
+            });
+
+            task.setOnFailed(evt -> {
+                Throwable ex = task.getException();
+                textareaAnswer.setText("Error: " + (ex != null ? ex.getMessage() : "Unknown error"));
+                if (buttonAsk != null) buttonAsk.setDisable(false);
+                if (loading != null) loading.setVisible(false);
+            });
+
+            Thread t = new Thread(task, "openai-request");
+            t.setDaemon(true);
+            t.start();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -81,42 +157,6 @@ public class ChatGPTJavaFxController implements Initializable {
         textareaAnswer.setText("");
         textareaHistory.setText("");
         contentHistory.clear();
-    }
-
-    private void fillAnswer() throws IOException {
-        OpenAIClient aiClient = new OpenAIClient();
-        String apiKey = aiClient.readApiKey();
-        CloseableHttpClient client = aiClient.initOpenAIClient();
-
-        String inputText = textQuestion.getText();
-        String myModel = "";
-        if (chkExtended.isSelected()){
-            myModel = "gpt-5";
-            chkSimple.setSelected(false);
-            lblExtendedModel.setText("model gpt5");
-            lblExtendedModel.setTextFill(Color.GREEN);
-            lblSimpleModel.setText("model gpt5-mini NOT USED");
-            lblSimpleModel.setTextFill(Color.RED);
-
-        } else  {
-            myModel = "gpt-5-mini";
-            chkSimple.setSelected(true);
-            chkExtended.setSelected(false);
-            lblExtendedModel.setText("model gpt5 NOT USED");
-            lblExtendedModel.setTextFill(Color.RED);
-            lblSimpleModel.setText("model gpt5-mini");
-            lblSimpleModel.setTextFill(Color.GREEN);
-
-        }
-        String myAnswer = aiClient.getOpenAIResponseGpt4(myModel, inputText, contentHistory, client, apiKey);
-        if (contentHistory.size() > 0) {
-            updateTextAreaHistory();
-        }
-        contentHistory.add("QUESTION");
-        contentHistory.add(inputText);
-        contentHistory.add("ANSWER");
-        contentHistory.add(myAnswer);
-        textareaAnswer.setText(myAnswer);
     }
 
     private void updateTextAreaHistory() {

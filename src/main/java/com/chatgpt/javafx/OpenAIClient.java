@@ -49,7 +49,7 @@ public  class OpenAIClient {
         return HttpClients.createDefault();
     }
 
-    public String getOpenAIResponseGpt4(String model, String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
+    public String getOpenAIResponseGpt(String model, String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         // Create the root node
         ObjectNode rootNode = mapper.createObjectNode();
@@ -113,7 +113,7 @@ public  class OpenAIClient {
             List<String> contentHistory = new ArrayList<>();
             contentHistory.add("Hello!");
             contentHistory.add("How can you assist me today?");
-            String response = getOpenAIResponseGpt4("gpt4-o-mini",inputText, contentHistory, client, apiKey);
+            String response = getOpenAIResponseGpt("gpt4-o-mini",inputText, contentHistory, client, apiKey);
             System.out.println("Answer: " + response);
 
         } catch (IOException e) {
