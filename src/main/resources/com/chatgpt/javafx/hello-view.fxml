@@ -3,6 +3,8 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
 <StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chatgpt.javafx.ChatGPTJavaFxController">
     <children>
@@ -31,6 +33,8 @@
                 </children>
             </GridPane>
 
+
+
             <Label text="Question" />
             <TextField id="textQuestion" fx:id="textQuestion" prefHeight="50.0" prefWidth="200.0" />
             <Label text="Image file" />
@@ -50,6 +54,17 @@
                     <Button id="buttonCancelTextToSpeech" fx:id="buttonCancelTextToSpeech" mnemonicParsing="false" text="Cancel Speech" onAction="#onCancelTextToSpeechClick" />
                 </buttons>
             </ButtonBar>
+            <Label text="Speech language" />
+            <ChoiceBox fx:id="languageChoice" onAction="#onLanguageSelectionChanged">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="English" />
+                        <String fx:value="German" />
+                        <String fx:value="Spanish" />
+                        <String fx:value="Japanese" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
             <Label fx:id="welcomeText" />
         </VBox>
 

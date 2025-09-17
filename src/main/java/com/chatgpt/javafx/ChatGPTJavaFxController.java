@@ -21,6 +21,7 @@ import java.io.File;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ChoiceBox;
 
 public class ChatGPTJavaFxController implements Initializable {
 
@@ -47,6 +48,9 @@ public class ChatGPTJavaFxController implements Initializable {
     private TextArea textareaAnswer;
     @FXML
     private TextArea textareaHistory;
+
+    @FXML
+    private ChoiceBox<String> languageChoice;
 
     // Buttons and progress
     @FXML
@@ -97,6 +101,34 @@ public class ChatGPTJavaFxController implements Initializable {
     @FXML
     protected void onCancelTextToSpeechClick() throws IOException {
         ttsService.stop();
+    }
+
+    @FXML
+    protected void onLanguageSelectionChanged(ActionEvent event) {
+        if (languageChoice == null || languageChoice.getValue() == null) return;
+        String selected = languageChoice.getValue();
+        String code = switch (selected) {
+            case "English" -> "en-US";
+            case "German" -> "de-DE";
+            case "Spanish" -> "es-ES";
+            case "Japanese" -> "ja-JP";
+            default -> null;
+        };
+        if (code != null) {
+            setTtsLanguageCode(code);
+        }
+    }
+
+    public void setTtsLanguageCode(String languageCode) {
+        try {
+            ttsService.setLanguageCode(languageCode);
+        } catch (Exception e) {
+            System.err.println("Failed to set TTS language: " + e.getMessage());
+        }
+    }
+
+    public void setTtsVoiceName(String voiceName) {
+        ttsService.setVoiceName(voiceName);
     }
     @FXML
     protected void onButtonAskClick() throws IOException {
