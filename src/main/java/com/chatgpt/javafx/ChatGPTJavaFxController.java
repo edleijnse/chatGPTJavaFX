@@ -57,6 +57,9 @@ public class ChatGPTJavaFxController implements Initializable {
     // Content history
     private final List<String> contentHistory = new ArrayList<>();
 
+    // Text-to-Speech service
+    private final TextToSpeechService ttsService = new TextToSpeechService();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("Controller initialized");
@@ -76,7 +79,25 @@ public class ChatGPTJavaFxController implements Initializable {
             loading.setVisible(false);
         }
     }
-
+    @FXML
+    protected void onTextToSpeechClick() throws IOException {
+        if (textareaAnswer == null) return;
+        String text = textareaAnswer.getText();
+        if (text == null || text.trim().isEmpty()) {
+            // Nothing to speak
+            return;
+        }
+        try {
+            ttsService.stop(); // ensure no overlap
+            ttsService.speakAsync(text);
+        } catch (Exception e) {
+            System.err.println("TTS error: " + e.getMessage());
+        }
+    }
+    @FXML
+    protected void onCancelTextToSpeechClick() throws IOException {
+        ttsService.stop();
+    }
     @FXML
     protected void onButtonAskClick() throws IOException {
         try {

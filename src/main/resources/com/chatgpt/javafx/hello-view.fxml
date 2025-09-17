@@ -46,8 +46,8 @@
                     <Button id="buttonAsk" fx:id="buttonAsk" onAction="#onButtonAskClick" text="Ask" />
                     <Button id="buttonClean" mnemonicParsing="false" onAction="#onCleanButtonClick" text="Clean" />
                     <Button id="buttonClearHistory" mnemonicParsing="false" onAction="#onClearHistoryButtonClick" text="Clear History" />
-                    <Button id="buttonTextToSpeech" mnemonicParsing="false" text="Text to Speech" />
-                    <Button id="buttonCancelTextToSpeech" mnemonicParsing="false" text="Cancel Speech" />
+                    <Button id="buttonTextToSpeech" fx:id="buttonTextToSpeech" mnemonicParsing="false" text="Text to Speech" onAction="#onTextToSpeechClick" />
+                    <Button id="buttonCancelTextToSpeech" fx:id="buttonCancelTextToSpeech" mnemonicParsing="false" text="Cancel Speech" onAction="#onCancelTextToSpeechClick" />
                 </buttons>
             </ButtonBar>
             <Label fx:id="welcomeText" />
