@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Base64;
 
 public  class OpenAIClient {
     public static String escapeHtml(String input) {
@@ -49,31 +50,59 @@ public  class OpenAIClient {
         return HttpClients.createDefault();
     }
 
-    public String getOpenAIResponseGpt(String model, String inputText, List<String> contentHistory, CloseableHttpClient client, String apiKey) throws IOException {
+    public String getOpenAIResponseGpt(String model,
+                                       String inputText,
+                                       List<String> contentHistory,
+                                       CloseableHttpClient client,
+                                       String apiKey,
+                                       File imageFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        // Create the root node
         ObjectNode rootNode = mapper.createObjectNode();
-        // Add the 'model' field
         rootNode.put("model", model);
-        // Create the 'messages' array node
         ArrayNode messagesNode = rootNode.putArray("messages");
 
-        // Add the content history messages
+        // Add the content history as plain user messages
         for (String historicalContent : contentHistory) {
             ObjectNode historyMessage = mapper.createObjectNode();
-            historyMessage.put("role", "user"); // Assuming historical messages are from the user
+            historyMessage.put("role", "user");
             historyMessage.put("content", escapeHtml(historicalContent));
             messagesNode.add(historyMessage);
         }
 
-        // Create a new message object for the current inputText
+        // Build the current user message, optionally adding an image
         ObjectNode message1 = mapper.createObjectNode();
-        message1.put("role", "user"); // Use the correct role
-        message1.put("content", escapeHtml(inputText));
-        // Add the message object to the 'messages' array
+        message1.put("role", "user");
+        if (imageFile != null && imageFile.exists()) {
+            ArrayNode contentArray = mapper.createArrayNode();
+
+            // Text part
+            ObjectNode textPart = mapper.createObjectNode();
+            textPart.put("type", "text");
+            textPart.put("text", escapeHtml(inputText));
+            contentArray.add(textPart);
+
+            // Image part as data URL
+            byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
+            String base64 = Base64.getEncoder().encodeToString(imageBytes);
+            String mimeType = Files.probeContentType(imageFile.toPath());
+            if (mimeType == null || !mimeType.startsWith("image/")) {
+                mimeType = "image/png";
+            }
+            ObjectNode imagePart = mapper.createObjectNode();
+            imagePart.put("type", "image_url");
+            ObjectNode imageUrl = mapper.createObjectNode();
+            imageUrl.put("url", "data:" + mimeType + ";base64," + base64);
+            imagePart.set("image_url", imageUrl);
+            contentArray.add(imagePart);
+
+            message1.set("content", contentArray);
+        } else {
+            // Fallback: simple text content
+            message1.put("content", escapeHtml(inputText));
+        }
         messagesNode.add(message1);
 
-        // Convert the rootNode to a JSON string
+        // Prepare request
         String requestBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
         HttpPost request = new HttpPost("https://api.openai.com/v1/chat/completions");
         request.setHeader("Authorization", "Bearer " + apiKey);
@@ -85,7 +114,7 @@ public  class OpenAIClient {
             if (statusCode != 200) {
                 String errorResponse = EntityUtils.toString(response.getEntity());
                 System.err.println("Error: " + errorResponse);
-                return "Error: " + errorResponse; // Or throw an exception
+                return "Error: " + errorResponse;
             }
             JsonNode responseData = mapper.readTree(response.getEntity().getContent());
             JsonNode choicesNode = responseData.path("choices");
@@ -95,9 +124,20 @@ public  class OpenAIClient {
             }
         } catch (Exception e) {
             System.err.println("Error occurred: " + e.getMessage());
-            return "Error: " + e.getMessage(); // Or throw an exception
+            return "Error: " + e.getMessage();
         }
         return "";
+    }
+
+    /**
+     * Backward-compatible overload without image. Delegates to the image-capable method with null.
+     */
+    public String getOpenAIResponseGpt(String model,
+                                       String inputText,
+                                       List<String> contentHistory,
+                                       CloseableHttpClient client,
+                                       String apiKey) throws IOException {
+        return getOpenAIResponseGpt(model, inputText, contentHistory, client, apiKey, (File) null);
     }
 
     public void main(String[] args) {

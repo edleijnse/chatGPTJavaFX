@@ -33,6 +33,11 @@
 
             <Label text="Question" />
             <TextField id="textQuestion" fx:id="textQuestion" prefHeight="50.0" prefWidth="200.0" />
+            <Label text="Image file" />
+            <HBox spacing="10.0">
+                <TextField fx:id="textImagePath" promptText="Select image file..." HBox.hgrow="ALWAYS" />
+                <Button text="Browse..." onAction="#onBrowseImageClick" />
+            </HBox>
             <Label text="Answer" />
             <TextArea id="textareaAnswer" fx:id="textareaAnswer" prefHeight="294.0" prefWidth="603.0" wrapText="true" />
             <TextArea id="textareaAnswer" fx:id="textareaHistory" prefHeight="294.0" prefWidth="603.0" wrapText="true" />

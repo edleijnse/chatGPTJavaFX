@@ -16,6 +16,8 @@ import java.util.List;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.stage.FileChooser;
+import java.io.File;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
@@ -37,6 +39,9 @@ public class ChatGPTJavaFxController implements Initializable {
 
     @FXML
     private TextField textQuestion;
+
+    @FXML
+    private TextField textImagePath;
 
     @FXML
     private TextArea textareaAnswer;
@@ -100,11 +105,24 @@ public class ChatGPTJavaFxController implements Initializable {
             String apiKey = aiClient.readApiKey();
             CloseableHttpClient client = aiClient.initOpenAIClient();
 
+            // Build optional image file from the UI field
+            File imageFile;
+            if (textImagePath != null) {
+                String p = textImagePath.getText();
+                if (p != null && !p.trim().isEmpty()) {
+                    imageFile = new File(p.trim());
+                } else {
+                    imageFile = null;
+                }
+            } else {
+                imageFile = null;
+            }
+
             Task<String> task = new Task<>() {
                 @Override
                 protected String call() throws Exception {
                     // Perform long-running call off the FX thread
-                    return aiClient.getOpenAIResponseGpt(myModel, inputText, contentHistory, client, apiKey);
+                    return aiClient.getOpenAIResponseGpt(myModel, inputText, contentHistory, client, apiKey, imageFile);
                 }
             };
 
@@ -157,6 +175,32 @@ public class ChatGPTJavaFxController implements Initializable {
         textareaAnswer.setText("");
         textareaHistory.setText("");
         contentHistory.clear();
+    }
+
+    @FXML
+    public void onBrowseImageClick(ActionEvent actionEvent) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select Image");
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        try {
+            if (textImagePath != null) {
+                String current = textImagePath.getText();
+                if (current != null && !current.trim().isEmpty()) {
+                    File currentFile = new File(current.trim());
+                    File dir = currentFile.isDirectory() ? currentFile : currentFile.getParentFile();
+                    if (dir != null && dir.exists()) {
+                        chooser.setInitialDirectory(dir);
+                    }
+                }
+            }
+        } catch (Exception ignore) { }
+        File selected = chooser.showOpenDialog(textQuestion != null ? textQuestion.getScene().getWindow() : null);
+        if (selected != null && textImagePath != null) {
+            textImagePath.setText(selected.getAbsolutePath());
+        }
     }
 
     private void updateTextAreaHistory() {
