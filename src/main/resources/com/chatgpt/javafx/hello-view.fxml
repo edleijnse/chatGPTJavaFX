@@ -36,7 +36,7 @@
             <Label text="Image file" />
             <HBox spacing="10.0">
                 <TextField fx:id="textImagePath" promptText="Select image file..." HBox.hgrow="ALWAYS" />
-                <Button text="Browse..." onAction="#onBrowseImageClick" />
+                <Button onAction="#onBrowseImageClick" text="Browse..." />
             </HBox>
             <Label text="Answer" />
             <TextArea id="textareaAnswer" fx:id="textareaAnswer" prefHeight="294.0" prefWidth="603.0" wrapText="true" />
@@ -46,16 +46,14 @@
                     <Button id="buttonAsk" fx:id="buttonAsk" onAction="#onButtonAskClick" text="Ask" />
                     <Button id="buttonClean" mnemonicParsing="false" onAction="#onCleanButtonClick" text="Clean" />
                     <Button id="buttonClearHistory" mnemonicParsing="false" onAction="#onClearHistoryButtonClick" text="Clear History" />
+                    <Button id="buttonTextToSpeech" mnemonicParsing="false" text="Text to Speech" />
+                    <Button id="buttonCancelTextToSpeech" mnemonicParsing="false" text="Cancel Speech" />
                 </buttons>
             </ButtonBar>
             <Label fx:id="welcomeText" />
         </VBox>
 
         <!-- Centered overlay spinner -->
-        <ProgressIndicator fx:id="loading"
-                           visible="false"
-                           StackPane.alignment="CENTER"
-                           prefWidth="64.0" prefHeight="64.0"
-                           mouseTransparent="true" />
+        <ProgressIndicator fx:id="loading" mouseTransparent="true" prefHeight="64.0" prefWidth="64.0" visible="false" StackPane.alignment="CENTER" />
     </children>
 </StackPane>
