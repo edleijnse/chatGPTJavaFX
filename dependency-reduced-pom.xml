@@ -36,6 +36,19 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>com.chatgpt.javafx.ChatGPTJavaFX</mainClass>
+          <launcher>ChatGPTJavaFX</launcher>
+          <modules>
+            <module>javafx.controls</module>
+            <module>javafx.fxml</module>
+          </modules>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -79,7 +92,7 @@
   <properties>
     <java.version>11</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <javafx.version>20.0.2</javafx.version>
+    <javafx.version>22.0.2</javafx.version>
     <junit.version>5.9.2</junit.version>
   </properties>
 </project>
