@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +61,7 @@ public class TextToSpeechService {
      * Starts speaking asynchronously. If another TTS is running, it will be stopped first.
      */
     public void speakAsync(String text) throws IOException {
+        text = sanitizeText(text);
         if (text == null || text.trim().isEmpty()) return;
 
         stop();
@@ -91,7 +93,9 @@ public class TextToSpeechService {
                       .append("[System.Globalization.CultureInfo]::GetCultureInfo('").append(escapedCulture).append("')) } catch{}; ");
         }
 
-        cmdBuilder.append("$s.Speak([Console]::In.ReadToEnd())");
+        cmdBuilder.append("[Console]::InputEncoding=[System.Text.Encoding]::UTF8; ")
+                  .append("[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; ")
+                  .append("$s.Speak([Console]::In.ReadToEnd())");
 
         List<String> cmd = Arrays.asList(
             "powershell",
@@ -181,6 +185,21 @@ public class TextToSpeechService {
         return null;
     }
 
+    // Normalize and sanitize text to avoid issues with certain engines/encodings
+    private String sanitizeText(String input) {
+        if (input == null) return null;
+        String t = Normalizer.normalize(input, Normalizer.Form.NFC);
+        // Replace typographic quotes and ellipsis
+        t = t.replace('\u2018', '\'')
+             .replace('\u2019', '\'')
+             .replace('\u201C', '\"')
+             .replace('\u201D', '\"')
+             .replace("\u2026", "...");
+        // Remove control characters except tab/newline
+        t = t.replaceAll("[\\p{Cntrl}&&[^\n\t]]", "");
+        return t;
+    }
+
     /**
      * Stops current speech if any.
      */
@@ -203,6 +222,10 @@ public class TextToSpeechService {
 
     private void startProcess(List<String> command) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(command);
+        // Ensure UTF-8 locales to handle special characters better
+        Map<String, String> env = pb.environment();
+        env.putIfAbsent("LC_ALL", "en_US.UTF-8");
+        env.putIfAbsent("LANG", "en_US.UTF-8");
         pb.redirectErrorStream(true);
         Process p = pb.start();
         synchronized (lock) {
@@ -237,6 +260,10 @@ public class TextToSpeechService {
 
     private void startProcessAndFeedStdin(List<String> command, String text) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(command);
+        // Ensure UTF-8 locales to handle special characters better
+        Map<String, String> env = pb.environment();
+        env.putIfAbsent("LC_ALL", "en_US.UTF-8");
+        env.putIfAbsent("LANG", "en_US.UTF-8");
         pb.redirectErrorStream(true);
         Process p = pb.start();
         synchronized (lock) {
