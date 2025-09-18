@@ -88,6 +88,19 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+    <repository>
+      <id>internal-releases</id>
+      <name>Internal Releases</name>
+      <url>file://${project.basedir}/target/maven-repo/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>internal-snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>file://${project.basedir}/target/maven-repo/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
     <plugins>
       <plugin>
