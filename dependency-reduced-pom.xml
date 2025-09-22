@@ -102,7 +102,7 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <java.version>11</java.version>
+    <java.version>25</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.version>22.0.2</javafx.version>
     <junit.version>5.9.2</junit.version>

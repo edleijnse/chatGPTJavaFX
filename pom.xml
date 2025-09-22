@@ -10,11 +10,23 @@
   <name>demoJavaFX</name>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.9.2</junit.version>
-    <java.version>11</java.version>
-    <javafx.version>22.0.2</javafx.version>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+    <javafx.version>25</javafx.version>
+    <!-- Wenn du unbedingt JDK 25 nutzt, setze javafx.version auf 25-ea und passe JDK an -->
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-bom</artifactId>
+        <version>${javafx.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -47,28 +59,22 @@
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
     </dependency>
+
+    <!-- Ersetze alle javafx-*-Einträge mit 12.0.2 (und linux-Classifier) durch diese drei: -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
-      <version>${javafx.version}</version>
-      <!-- classifier entfernt, damit die passende Plattformvariante automatisch aufgelöst wird -->
     </dependency>
-    <dependency>
-      <groupId>org.controlsfx</groupId>
-      <artifactId>controlsfx</artifactId>
-      <version>11.1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.dlsc.formsfx</groupId>
-      <artifactId>formsfx-core</artifactId>
-      <version>11.6.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+
+    
     <dependency>
       <groupId>org.kordamp.bootstrapfx</groupId>
       <artifactId>bootstrapfx-core</artifactId>
@@ -108,8 +114,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
+          <release>25</release>
         </configuration>
       </plugin>
       <plugin>
@@ -138,16 +143,17 @@
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
+        <version>${javafx.version}</version>
         <configuration>
           <mainClass>com.chatgpt.javafx.ChatGPTJavaFX</mainClass>
-          <launcher>ChatGPTJavaFX</launcher>
-          <modules>
-            <module>javafx.controls</module>
-            <module>javafx.fxml</module>
-          </modules>
+          <!-- Optional: explizite Module, falls du modular baust
+          <launcher>app</launcher>
+          <javafxArtifactsPath>${project.build.directory}/javafx</javafxArtifactsPath>
+          -->
         </configuration>
       </plugin>
+
+      
     </plugins>
   </build>
 </project>
