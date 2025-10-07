@@ -6,7 +6,15 @@ https://gluonhq.com/products/scene-builder/
 
 add jvm options  
 --module-path "C:\Program Files\javafx-sdk-22.0.2\lib" --add-modules javafx.controls,javafx.fxml
+For Raspberry Users:
+It's rather difficult to find the right openjfx version,
+The installation with snapd works:
 
+sudo apt install snapd
+
+sudo reboot
+
+sudo snap install openjfx
 
 You need an api_key, it will be red from the parent directory
 To get an API key for OpenAI, follow these steps:
