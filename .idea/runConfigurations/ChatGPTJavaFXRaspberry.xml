@@ -5,7 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="com.chatgpt.javafx.ChatGPTJavaFX" />
     <module name="chatGPTJavaFX" />
     <option name="PROGRAM_PARAMETERS" value="$AffectedModuleNames$" />
-    <option name="VM_PARAMETERS" value="--module-path &quot;$USER_HOME$/javafx-sdk-23.0.2/lib&quot;  --add-modules javafx.controls,javafx.fxml" />
+    <option name="VM_PARAMETERS" value="--module-path &quot;/usr/share/openjfx/lib&quot;  --add-modules javafx.controls,javafx.fxml" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
