@@ -138,19 +138,19 @@ public class ChatGPTJavaFxController implements Initializable {
             // Determine model and reflect in labels
             String myModel;
             if (chkExtended.isSelected()){
-                myModel = "gpt-5";
+                myModel = "gpt-5.6-sol";
                 chkSimple.setSelected(false);
-                lblExtendedModel.setText("model gpt5");
+                lblExtendedModel.setText("model gpt-5.6-sol");
                 lblExtendedModel.setTextFill(Color.GREEN);
                 lblSimpleModel.setText("model gpt5-mini NOT USED");
                 lblSimpleModel.setTextFill(Color.RED);
             } else  {
-                myModel = "gpt-5-mini";
+                myModel = "gpt-5.6-terra";
                 chkSimple.setSelected(true);
                 chkExtended.setSelected(false);
                 lblExtendedModel.setText("model gpt5 NOT USED");
                 lblExtendedModel.setTextFill(Color.RED);
-                lblSimpleModel.setText("model gpt5-mini");
+                lblSimpleModel.setText("model gpt5.6-terra");
                 lblSimpleModel.setTextFill(Color.GREEN);
             }
 
@@ -270,9 +270,9 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkSimple.isSelected()) {
             System.out.println("Simple model wird verwendet.");
             chkExtended.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o NOT USED");
+            lblExtendedModel.setText("model gpt-5.6-sol NOT USED");
             lblExtendedModel.setTextFill(Color.RED);
-            lblSimpleModel.setText("model gpt4-0-mini");
+            lblSimpleModel.setText("model gpt-5.6-terra");
             lblSimpleModel.setTextFill(Color.GREEN);
         } else {
             System.out.println("Simple model wird nicht verwendet.");
@@ -287,9 +287,9 @@ public class ChatGPTJavaFxController implements Initializable {
         if (chkExtended.isSelected()) {
             System.out.println("Extended model wird verwendet.");
             chkSimple.setSelected(false);
-            lblExtendedModel.setText("model gpt4-o");
+            lblExtendedModel.setText("model gpt-5.6-sol");
             lblExtendedModel.setTextFill(Color.GREEN);
-            lblSimpleModel.setText("model gpt4-0-mini NOT USED");
+            lblSimpleModel.setText("model gpt-5.6-terra NOT USED");
             lblSimpleModel.setTextFill(Color.RED);
         } else {
             System.out.println("Extended model wird nicht verwendet.");
